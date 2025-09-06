@@ -3,19 +3,18 @@ CREATE PROCEDURE sp_Insertar_Empleado
 	@NombreP varchar(64),
 	@SalarioP money
 AS
--- Usamos un transaction para mantener ACID
-BEGIN TRANSACTION
-	-- Intentar insertar y commit
-	BEGIN TRY
-		INSERT INTO dbo.Empleado (Nombre, Salario) VALUES
-			(@NombreP, @SalarioP);
-		COMMIT
-		RETURN 0; -- No errores
-	END TRY
-	-- Si falla hacemos rollback
-	BEGIN CATCH
-		ROLLBACK
-		RETURN 1; -- Error ewwwwww
-	END CATCH
-COMMIT
+-- Revisamos que el usuario no exista para mantener consistencia
+IF (SELECT count(Nombre) FROM dbo.Empleado WHERE Nombre = @NombreP) != 0
+	RETURN 1; -- Error ewwww
+
+-- Utilizamos un try catch para mantener ACID
+BEGIN TRY
+	INSERT INTO dbo.Empleado (Nombre, Salario) VALUES
+		(@NombreP, @SalarioP);
+	RETURN 0; -- No err
+END TRY
+BEGIN CATCH
+	RETURN 1; -- Err
+END CATCH
+
 GO
