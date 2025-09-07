@@ -1,193 +1,230 @@
 <!doctype html>
 <html>
-    <head>
-    <meta charset="utf-8">
-    <title>Lista de empleados</title>
-    <style>
-        .table{
-            border-collapse: collapse; /* fusiona bordes */
-            border: 1px solid #c9d6df;  /* borde de la tabla */
-            width: 100%; /* ancho completo */
-            margin-bottom: 20px; /* espacio inferior */
-            box-shadow: 0 2px 5px rgba(200, 200, 200, 0.3); /* sombra sutil */
-            background-color: #fdfdfd;
-        }
-        .th, .td{
-            border: 1px solid #d6e4f0; /* borde de celdas */
-            padding: 12px; /* espacio interno */
-            text-align: center; /* alineación del texto */
-            font-family: 'Times New Roman', Times, serif;
-            color: #4a4a4a;
-        }
-        .th {
-            background-color: #3ad2d8; /* color de fondo para encabezados */
-            color: #ffffff;
-            font-weight: bold; /* texto en negrita */
-        }
-        .tr:nth-child(even) {
-            background-color: #e5ecff; /* color de fondo para filas pares */
-        }
-        .tr:nth-child(odd){
-            background-color: #e5ecff;;
-        }
-        .th:hover {
-            background-color: #ffcad4; /* color de fondo al pasar el ratón */
-            transition: 0.3s ease; 
-        }   
-        .insertar{
-            max-width:720px; margin:0 auto; padding:6px 8px 0;
-            display:flex; align-items:center; gap:12px; flex-wrap:wrap;
-        }
-        .btn{
-            display:inline-flex; 
-            align-items:center; 
-            gap:8px;
-            padding:10px 16px;
-            font-weight:700; 
-            border:0; 
-            border-radius:10px; 
-            cursor:pointer;
-            background:#3ad2d8; color:#fefefe; box-shadow:0 2px 0 rgba(255, 255, 255, 0.08);
-        }
-        .btn-Insert .tri{
-             width:0;
-             height:0;
-             border-top:7px solid transparent;
-             border-bottom:7px solid transparent;
-        } 
-        .overlay{
-            display: none; /* oculto por defecto */
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center; 
-        }
-        .modal{
-            background: #fff;
-            padding: 20px;
-            width: 300px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); 
-        }
-         input {
-            width: 90%;
-            padding: 8px;
-            margin: 6px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .btn-guardar {
-            background: #6a38f3;
-            color: white;
-        }
-        .btn-cerrar {
-            background: #ff6b6b;
-            color: white;
-        }
 
-    </style>
+<head>
+	<meta charset="utf-8">
+	<title>Lista de empleados</title>
+	<style>
+		.table-wrapper {
+			width: 100%;
+			overflow-y: scroll;
+			max-height: 25rem;
+		}
+		table {
+			border-collapse: collapse;
+			border: 1px solid #c9d6df;
+			margin-bottom: 20px;
+			box-shadow: 0 2px 5px rgba(200, 200, 200, 0.3);
+			background-color: #fdfdfd;
+			width: 100%;
+		}
 
-    </head>
-    <body> 
-        <h1>Lista de empleados</h1>
-        <p>La lista de empleados se clasifica en orden alfabetico ascendente por el nombre</p>
-        <table class="table">
-                <thead> 
-                <tr class="tr"> 
-                    <th class="th">ID</th>
-                    <th class="th">Nombre</th>
-                    <th class="th">Salario</th>
-                </tr>
-                </thead>
-                <tbody id="lista">
-                <tr class="tr">
-                    <td class="td">2023044809</td>
-                    <td class="td">Krissia Bejarano Trigueros</td>
-                    <td class="td">$1,000,000</td>
-                 </tr class="tr">
-                <tr class="tr">
-                    <td class="td">20230346349</td>
-                    <td class="td">Sebastian Sanchez Delgado</td>
-                    <td class="td">$1,000,000</td>
-                </tr>
-                </tbody>
-        </table>
-        <section class="insertar">
-          <button id="btnInsert" class="btn btn-Insert" onclick="abrirModal()">
-            <span class="tri"></span><span>INSERTAR</span>
-        </button>
-      <div id="overlay" class="overlay">
-        <div class="modal">
-            <h2>Insertar empleado</h2>
-            <input type="text" id="Nombre" placeholder="Nombre"><br>
-            <input type="number" id="Salario" placeholder="Salario"><br>
+		th, 
+		td {
+			border: 1px solid #d6e4f0;
+			padding: 12px;
+			text-align: center;
+			font-family: 'Times New Roman', Times, serif;
+			color: #4a4a4a;
+		}
 
-            <button class="btn btn-insert" onclick="insertar()">Insertar</button>
-            <button class="btn btn-regresar" onclick="cerrarModal()">Regresar</button>
-        </div>
-      </div>
-      <script>
-        let datos=[
-            { Nombre: "Krissia", Salario: 1000000 }, 
-            {Nombre: "Sebastian", Salario: 1000000}
-        ]
+		th {
+			background-color: #3ad2d8;
+			color: #ffffff;
+			font-weight: bold;
+		}
 
-        function abrirModal(){
-        document.getElementById("overlay").style.display = "flex"; 
-        }
+		tr:nth-child(even) {
+			background-color: #e5ecff;
+		}
 
-        function cerrarModal(){
-        document.getElementById("overlay").style.display = "none"; 
-        }
+		tr:nth-child(odd) {
+			background-color: #e5ecff;
+		}
 
-        function insertar(){
+		th:hover {
+			background-color: #ffcad4;
+			transition: 0.3s ease;
+		}
 
-            let Nombre = document.getElementById("Nombre").value;
-            let Salario = document.getElementById("Salario").value;
+		.insertar {
+			max-width: 720px;
+			margin: 0 auto;
+			padding: 6px 8px 0;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			flex-wrap: wrap;
+		}
 
-            let dato={Nombre, Salario};
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 10px 16px;
+			font-weight: 700;
+			border: 0;
+			border-radius: 10px;
+			cursor: pointer;
+			background: #3ad2d8;
+			color: #fefefe;
+			box-shadow: 0 2px 0 rgba(255, 255, 255, 0.08);
+		}
 
-            if (Nombre.trim()==="" || Salario.trim()===""){
-            alert("Llene todos los campos");
-            return;
-            }
+		.overlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			align-items: center;
+			justify-content: center;
+		}
 
-            if(validacion(dato)===false){
-                alert("Valor existente, ingrese otros datos");
-                return;
-            }
+		.modal {
+			background: #fff;
+			padding: 20px;
+			width: 300px;
+			border-radius: 10px;
+			text-align: center;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+		}
 
-            datos.push({Nombre, Salario});
+		input {
+			width: 90%;
+			padding: 8px;
+			margin: 6px 0;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+	</style>
 
-            let lista = document.getElementById("lista");
+</head>
 
-            lista.innerHTML = "";
-            datos.forEach(d => {
-                let fila = document.createElement("tr");
-                 fila.innerHTML = `<td>${d.Nombre}</td><td>$${d.Salario}</td>`;
-                 lista.appendChild(fila);
-            });
+<body>
+	<h1>Lista de empleados</h1>
+	<p>La lista de empleados se clasifica en orden alfabetico ascendente por el nombre</p>
+	<div class="table-wrapper">
+		<table>
+			<thead>
+				<tr>
+					<th scope="col">ID</th>
+					<th scope="col">Nombre</th>
+					<th scope="col">Salario</th>
+				</tr>
+			</thead>
+			<tbody id="lista-empleados"></tbody>
+		</table>
+	</div>
 
-             document.getElementById("Nombre").value = "";
-            document.getElementById("Salario").value = "";
+	<div class="insertar">
+		<button id="btnInsert" class="btn btn-Insert" onclick="abrirModal()">
+			<span>INSERTAR</span>
+		</button>
+	</div>
+	<div id="overlay" class="overlay">
+		<div class="modal">
+			<h2>Insertar empleado</h2>
+			<input type="text" id="Nombre" placeholder="Nombre"><br>
+			<input type="number" id="Salario" placeholder="Salario"><br>
+			
+			<button class="btn btn-insert" onclick="insertar()">Insertar</button>
+			<button class="btn btn-regresar" onclick="cerrarModal()">Regresar</button>
+		</div>
+	</div>
+	
+	<script>
+		var apiUrl = window.location.origin + "/api/";
 
-            cerrarModal();
+		function abrirModal() {
+			document.getElementById("overlay").style.display = "flex";
+			getQueryEmpleados();
+		}
 
-        }
+		function cerrarModal() {
+			document.getElementById("overlay").style.display = "none";
+			getQueryEmpleados();
+		}
 
-        function validacion(valor_insertar) {
-            for (let persona of datos) {
-                if (persona.Nombre === valor_insertar.Nombre) {
-                    return false; // Ya existe
-                }
-            }
-            return true; // No existe aún
-        }
+		function insertar() {
 
-      </script>
-    </body>
+			let Nombre = document.getElementById("Nombre").value.trim();
+			let Salario = document.getElementById("Salario").value.trim();
+
+			if (Nombre === "" || Salario === "") {
+				alert("Llene todos los campos");
+				return;
+			}
+
+			if (Nombre.length() > 64) {
+				alert("El nombre dado excede el tamaño maximo")
+				return;
+			}
+
+			if (isNaN(parseFloat(Salario))) {
+				document.getElementById("Salario").value = ""
+				alert("Valor monetario no es valido");
+				return;
+			}
+
+			fetch(apiUrl, {
+				method: "POST",
+				body: JSON.stringify({
+					Nombre: Nombre,
+					Salario: parseFloat(Salario),
+				}),
+				headers: {
+					"Content-type": "application/json; charset=UTF-8"
+				},
+			})
+			.then(response => response.json())
+			.then(json => {
+				console.log(json);
+
+				if(json.state != "OK") {
+					alert(json.description);
+				}
+
+				else {
+					alert("Empleado fue insertado")
+				}
+			})
+
+			
+		}
+
+		function validacion(valor_insertar) {
+			for (let persona of datos) {
+				if (persona.Nombre === valor_insertar.Nombre) {
+					return false; // Ya existe
+				}
+			}
+			return true; // No existe aún
+		}
+
+
+		function getQueryEmpleados() {
+			let lista = document.getElementById("lista-empleados");
+
+			
+			fetch(apiUrl, { method: "GET" })
+			.then(response => response.json())
+			.then(json => {
+				console.log(json);
+				
+				lista.innerText = "";
+				for (empleado of json.empleados) {
+					let fila = document.createElement("tr");
+					fila.innerHTML = `<td>${empleado.Id}</td><td>${empleado.Nombre}</td><td>c ${empleado.Salario}</td>`;
+					lista.appendChild(fila);
+				}
+			})
+		}
+
+		getQueryEmpleados()
+	</script>
+</body>
+
 </html>
