@@ -9,6 +9,8 @@
 			width: 100%;
 			overflow-y: scroll;
 			max-height: 25rem;
+
+			border-radius: 1rem;
 		}
 		table {
 			border-collapse: collapse;
@@ -48,18 +50,11 @@
 		}
 
 		.insertar {
-			max-width: 720px;
-			margin: 0 auto;
 			padding: 6px 8px 0;
-			display: flex;
-			align-items: center;
 			gap: 12px;
-			flex-wrap: wrap;
 		}
 
 		.btn {
-			display: inline-flex;
-			align-items: center;
 			gap: 8px;
 			padding: 10px 16px;
 			font-weight: 700;
@@ -69,6 +64,13 @@
 			background: #3ad2d8;
 			color: #fefefe;
 			box-shadow: 0 2px 0 rgba(255, 255, 255, 0.08);
+
+			&:hover {
+				background: #5ee6eb;
+			}
+			&:active {
+				background: #a3fcff;
+			}
 		}
 
 		.overlay {
@@ -120,9 +122,8 @@
 	</div>
 
 	<div class="insertar">
-		<button id="btnInsert" class="btn btn-Insert" onclick="abrirModal()">
-			<span>INSERTAR</span>
-		</button>
+		<button class="btn" onclick="abrirModal()">Insertar</button>
+		<button class="btn" onclick="getQueryEmpleados()">Refresh</button>
 	</div>
 	<div id="overlay" class="overlay">
 		<div class="modal">
@@ -158,10 +159,10 @@
 				return;
 			}
 
-			if (Nombre.length() > 64) {
-				alert("El nombre dado excede el tamaño maximo")
-				return;
-			}
+			// if (Nombre.length() > 64) {
+			// 	alert("El nombre dado excede el tamaño maximo")
+			// 	return;
+			// }
 
 			if (isNaN(parseFloat(Salario))) {
 				document.getElementById("Salario").value = ""
