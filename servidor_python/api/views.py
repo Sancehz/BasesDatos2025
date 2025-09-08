@@ -40,6 +40,7 @@ def index(request):
 		crsr.execute(sp_query)
 		rows = crsr.fetchall()
 
+		# lo convertimos a una lista de diccionarios para serializarlo
 		empleados_plain = []
 		for row in rows:
 			empleados_plain.append({
@@ -48,6 +49,7 @@ def index(request):
 				"Salario": float(row[2])
 			})
 
+		# response
 		return django.http.HttpResponse(json.dumps({
 			"state": "OK",
 			"description": "Los empleados fueron consultados correctamente",
@@ -69,6 +71,7 @@ def index(request):
 		## de otra manera, corremos el stored procedure y esperamos una respuesta
 		crsr.execute(sp_insertar, (post_body["Nombre"], post_body["Salario"]))
 
+		## no tuvo errores
 		if(crsr.fetchval() == 0):
 			crsr.commit()
 			return django.http.HttpResponse(json.dumps({
@@ -76,6 +79,7 @@ def index(request):
 				"description": "Resultado de la inserscion de un empleado",
 			}))
 		
+		## tuvo errores
 		else:
 			crsr.rollback()
 			return django.http.HttpResponse(json.dumps({

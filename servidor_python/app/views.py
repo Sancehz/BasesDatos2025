@@ -10,5 +10,3 @@ def index(request):
 		html_content = f.read()
 
 	return django.http.HttpResponse(html_content)
-
-#teccr123123bdatos
